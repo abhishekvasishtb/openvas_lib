@@ -956,15 +956,9 @@ class VulnscanManager(object):
         if not isinstance(task_id, str):
             raise TypeError("Expected string, got %r instead" % type(task_id))
 
-        if self.__manager.is_task_running(task_id):
-            raise VulnscanTaskNotFinishedError(
-                "Task is currently running. Until it not finished, you can't obtain the results.")
-
         try:
             # This returns all results from all tasks. Task filter doesn't work.
-            #m_response = self.__manager.get_results(task_id)
-
-            m_response = self.__manager.get_report_xml(self.__task_report_id)
+            m_response = self.__manager.get_results(task_id)
         except ServerError as e:
             raise VulnscanServerError("Can't get the results for the task %s. Error: %s" % (task_id, e.message))
 
