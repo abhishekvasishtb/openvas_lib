@@ -962,9 +962,7 @@ class VulnscanManager(object):
         except ServerError as e:
             raise VulnscanServerError("Can't get the results for the task %s. Error: %s" % (task_id, e.message))
 
-        m_response = etree.tostring(m_response)
-
-        return report_parser_from_text(m_response)
+        return m_response
 
     # ----------------------------------------------------------------------
     def get_raw_xml(self, task_id):
