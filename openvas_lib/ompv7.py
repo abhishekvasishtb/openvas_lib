@@ -829,7 +829,7 @@ class OMPv7(OMP):
             <comment>%s</comment>
                         <scanner id="%s"/>
             <config id="%s"/>
-            <target id="%s"/>""" % (name, scanner, comment, config, target)
+            <target id="%s"/>""" % (name, comment, scanner, config, target)
 
         if schedule:
             request += """<schedule id= "%s"/>""" % (schedule)
