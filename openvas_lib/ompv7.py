@@ -495,6 +495,31 @@ class OMPv7(OMP):
 	# ----------------------------------------------------------------------
 	# ----------------------------------------------------------------------
 	#
+	# METHODS FOR SCANNER
+	#
+	# ----------------------------------------------------------------------
+	def get_scanners(self, scanner_id=None):
+		"""
+		Get information about the scanners in the server.
+
+		If name param is provided, only get the scanner associated to this name.
+
+		:param scanner_id: scanner id to get
+		:type scanner_id: str
+
+		:return: `ElementTree`
+
+		:raises: ClientError, ServerError
+		"""
+		# Recover all scanner from OpenVAS
+		if scanner_id:
+			return self._manager.make_xml_request('<get_scanners scanner_id="%s"/>' % scanner_id, xml_result=True)
+		else:
+			return self._manager.make_xml_request("<get_scanners />", xml_result=True)
+                
+	# ----------------------------------------------------------------------
+	# ----------------------------------------------------------------------
+	#
 	# METHODS FOR CONFIG
 	#
 	# ----------------------------------------------------------------------
@@ -517,6 +542,31 @@ class OMPv7(OMP):
 		else:
 			return self._manager.make_xml_request("<get_configs />", xml_result=True)
 
+
+        # ----------------------------------------------------------------------
+	def get_scanners_ids(self, name=None):
+		"""
+		Get information about the configured profiles (scanners)in the server.
+
+		If name param is provided, only get the ID associated to this name.
+
+		:param name: config name to get
+		:type name: str
+
+		:return: a dict with the format: {config_name: config_ID}
+
+		:raises: ClientError, ServerError
+		"""
+		m_return = {}
+
+		for x in self.get_scanners().findall("scanner"):
+			m_return[x.find("name").text] = x.get("id")
+
+		if name:
+			return {name: m_return[name]}
+		else:
+			return m_return
+                
 	# ----------------------------------------------------------------------
 	def get_configs_ids(self, name=None):
 		"""
@@ -665,7 +715,7 @@ class OMPv7(OMP):
 	#
 	# ----------------------------------------------------------------------
 
-	def create_task(self, name, target, config=None, schedule=None, comment="", max_checks=None, max_hosts=None):
+	def create_task(self, name, target, scanner=None, config=None, schedule=None, comment="", max_checks=None, max_hosts=None):
 		"""
 		Creates a task in OpenVAS.
 
@@ -699,11 +749,15 @@ class OMPv7(OMP):
 		if not config:
 			config = "Full and fast"
 
+                if not scanner:
+                        scanner = "CVE"
+
 		request = """<create_task>
 			<name>%s</name>
 			<comment>%s</comment>
+                        <scanner id="%s"/>
 			<config id="%s"/>
-			<target id="%s"/>""" % (name, comment, config, target)
+			<target id="%s"/>""" % (name, scanner, comment, config, target)
 
 		if schedule:
 			request += """<schedule id= "%s"/>""" % (schedule)
