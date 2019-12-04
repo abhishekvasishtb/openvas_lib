@@ -673,10 +673,10 @@ class VulnscanManager(object):
         except ServerError as e:
             raise VulnscanTargetError("The target already exits on the server. Error: %s" % e.message)
                 
-                # Get the scanner ID by their name
+        # Get the scanner ID by their name
         try:
             tmp = self.__manager.get_scanners_ids(scanner)
-            m_profile_id = tmp[scanner]
+            m_scanner_id = tmp[scanner]
         except ServerError as e:
             raise VulnscanProfileError("The scanner select not exits int the server. Error: %s" % e.message)
         except KeyError:
@@ -694,13 +694,13 @@ class VulnscanManager(object):
         # Create task
         try:
             m_task_id = self.__manager.create_task(name=m_job_name,
-                                                               scanner=m_scanner_id,
-                                   target=m_target_id,
-                                   max_hosts=max_hosts,
-                                   max_checks=max_checks,
-                                   config=m_profile_id,
-                                   schedule=schedule,
-                                   comment=comment)
+                                                   scanner=m_scanner_id,
+                                                   target=m_target_id,
+                                                   max_hosts=max_hosts,
+                                                   max_checks=max_checks,
+                                                   config=m_profile_id,
+                                                   schedule=schedule,
+                                                   comment=comment)
         except ServerError as e:
             raise VulnscanScanError("The target selected doesnn't exist in the server. Error: %s" % e.message)
 
