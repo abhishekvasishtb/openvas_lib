@@ -1,4 +1,4 @@
-q#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
 This file contains OMPv7 implementation
