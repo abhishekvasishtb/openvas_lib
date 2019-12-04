@@ -629,6 +629,11 @@ class VulnscanManager(object):
         if not isinstance(profile, str):
             raise TypeError("Expected string, got %r instead" % type(profile))
 
+
+        scanner = kwargs.get("scanner", "CVE")
+        if not isinstance(scanner, str):
+            raise TypeError("Expected string, got %r instead" % type(scanner))
+
         schedule = kwargs.get("schedule",None)
 
         call_back_end = kwargs.get("callback_end", None)
